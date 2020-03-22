@@ -85,7 +85,7 @@ func cleanRequest(request *http.Request) {
 }
 
 func getAccessToken(accessTokenId string) (*accessToken, *rest_errors.RestErr) {
-	url := "localhost:8080/oauth/access_token/" + accessTokenId
+	url := "localhost:8081/oauth/access_token/" + accessTokenId
 	method := "GET"
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
