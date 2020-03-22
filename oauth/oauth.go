@@ -3,7 +3,9 @@ package oauth
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mojoboss/bookstore_utils-go/logger"
 	"github.com/mojoboss/bookstore_utils-go/rest_errors"
+	"go.uber.org/zap"
 	"net/http"
 	"strconv"
 	"strings"
@@ -65,7 +67,9 @@ func AuthenticateRequest(request *http.Request) *rest_errors.RestErr {
 	}
 
 	at, err := getAccessToken(accessTokenId)
+	logger.Info("AuthenticateRequest called in oauth..", zap.String("access_token", at.Id))
 	if err != nil {
+		logger.Error("Error in AuthenticateRequest", nil, zap.String("err", err.Error))
 		if err.Status == http.StatusNotFound {
 			return nil
 		}
@@ -85,7 +89,7 @@ func cleanRequest(request *http.Request) {
 }
 
 func getAccessToken(accessTokenId string) (*accessToken, *rest_errors.RestErr) {
-	url := "localhost:8081/oauth/access_token/" + accessTokenId
+	url := "http://localhost:8081/oauth/access_token/" + accessTokenId
 	method := "GET"
 	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
